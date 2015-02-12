@@ -16,10 +16,8 @@ class UserMapper{
 							);
 							
 		$query = "INSERT INTO Users(username,password,date_register) values(:username,:password,:date_register)";
-		if( $this->connection->executeQuery($query, $parameters) !== null  ){ 
-			return new User($user->getUserName(), $user->getPassword(), new \DateTime($user->getDateRegister()), $this->connection->lastInsertId() );
-		}
-		return null;
+		return $this->connection->executeQuery($query, $parameters);
+
     }
 
     public function remove(User $user){

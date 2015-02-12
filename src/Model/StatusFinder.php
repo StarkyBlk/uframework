@@ -18,7 +18,7 @@ class StatusFinder implements FinderInterface{
     public function findAll($limit = FinderInterface::LIMIT, $offset = FinderInterface::OFFSET){
 		$statuses = [];
 		$query = "SELECT s.id, s.user_id, u.username, s.message, s.date_post, s.client FROM Statuses AS s LEFT JOIN Users AS u on s.user_id = u.id ORDER BY s.date_post DESC LIMIT ". $offset . ", " . $limit;
-		$results = $this->connection->executeQuery($query);
+		$results = $this->connection->execute($query);
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
@@ -38,7 +38,7 @@ class StatusFinder implements FinderInterface{
     public function findOneById($id){
 		$status=null;
 		$query = "SELECT s.id, s.user_id, u.username, s.message, s.date_post, s.client FROM Statuses AS s LEFT JOIN Users AS u on s.user_id = u.id WHERE s.id=:id";
-		$results = $this->connection->executeQuery($query, array("id" => $id));
+		$results = $this->connection->execute($query, array("id" => $id));
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
@@ -55,7 +55,7 @@ class StatusFinder implements FinderInterface{
     public function findAllByUserId($id ,$limit = FinderInterface::LIMIT, $offset = FinderInterface::OFFSET){
 		$statuses = [];
 		$query = "SELECT s.id, s.user_id, u.username, s.message, s.date_post, s.client FROM Statuses AS s LEFT JOIN Users AS u on s.user_id = u.id WHERE s.user_id=:id ORDER BY s.date_post DESC LIMIT ". $offset . ", " . $limit;
-		$results = $this->connection->executeQuery($query, array("id" => $id));
+		$results = $this->connection->execute($query, array("id" => $id));
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){

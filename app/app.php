@@ -7,7 +7,13 @@ use Model\FinderInterface;
 // Config
 $debug = true;
 
-$connection = new Model\Connection();
+
+$dbname = 'uframework';
+$host = 'localhost';
+$user = 'uframework';
+$password = 'passw0rd';
+$dsn = 'mysql:dbname=' . $dbname . ';host=' . $host;
+$connection = new Model\Connection($dsn, $user, $password);
 
 $app = new \App(new View\TemplateEngine(
     __DIR__ . '/templates/'
@@ -89,14 +95,15 @@ $app->get('/signin', function (Request $request) use ($app) {
 
 $app->post('/signin', function (Request $request) use ($app, $connection) {
 	$mapper = new Model\UserMapper($connection);
-	$finder = new Model\UserFinder($connection);
-	$passwordHash = password_hash($request->getParameter('password'), PASSWORD_DEFAULT);
-	$user = new Model\User($request->getParameter('username'), $passwordHash, new DateTime(date("Y-m-d H:i:s")));
+	$userFinder = new Model\UserFinder($connection);
+	$username = $request->getParameter('username');
+    $password = $request->getParameter('password');
+	$passwordHash = password_hash($password, PASSWORD_DEFAULT);
+	$user = new Model\User($username, $passwordHash, new DateTime(date("Y-m-d H:i:s")));
 	$newUser = $mapper->persist($user);
-	if($newUser !== null){
+	if($newUser){
 		$_SESSION['is_authenticated'] = true;
-		$_SESSION['user'] = $newUser;
-		var_dump($newUser);
+		$_SESSION['user'] = $userFinder->findOneByUserNamePassword($username,$password);
 		return $app->redirect('/');
 	}
 	throw new Exception\HttpException(400,"Utilisateur deja existant");

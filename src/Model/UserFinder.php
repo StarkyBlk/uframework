@@ -18,7 +18,7 @@ class UserFinder implements FinderInterface{
     public function findAll($limit = FinderInterface::LIMIT, $offset = FinderInterface::OFFSET){
 		$users = [];
 		$query = "SELECT * FROM users order by date_register DESC LIMIT ". $offset . ", " . $limit;
-		$results = $this->connection->executeQuery($query);
+		$results = $this->connection->execute($query);
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
@@ -38,7 +38,7 @@ class UserFinder implements FinderInterface{
     public function findOneById($id){
 		$user=null;
 		$query = "SELECT * FROM Users where id=:id";
-		$results = $this->connection->executeQuery($query, array("id" => $id));
+		$results = $this->connection->execute($query, array("id" => $id));
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
@@ -56,7 +56,7 @@ class UserFinder implements FinderInterface{
     public function findOneByUserNamePassword($username, $password){
 		$user=null;
 		$query = "SELECT * FROM Users where username=:username";
-		$results = $this->connection->executeQuery($query, array("username" => $username));
+		$results = $this->connection->execute($query, array("username" => $username));
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){

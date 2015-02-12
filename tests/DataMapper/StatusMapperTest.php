@@ -21,12 +21,12 @@ class StatusMapperTest extends \TestCase{
 	}
 
 	public function testPersist(){
-		$status = new Status('test','test', new DateTime(date("Y-m-d H:i:s")), 'sdfsd');
+		$status = new Status('test', new DateTime(date("Y-m-d H:i:s")), 'sdfsd' , null, null, null);
 		$this->mapper->persist($status);
 	}
 	
 	public function testRemove(){
-		$status = new Status('test','test', new DateTime(date("Y-m-d H:i:s")), 'sdfsd', '1');
+		$status = new Status('test', new DateTime(date("Y-m-d H:i:s")), 'sdfsd' , null, null, null);
 		$this->mapper->remove($status);
 	}
 }
