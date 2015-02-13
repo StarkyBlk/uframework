@@ -42,7 +42,7 @@ class UserFinder implements FinderInterface{
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
-			$user = new Status($results[0]['username'], $results[0]['password'], new \DateTime($results[0]['date_creation']), $results[0]['id']);
+			$user = new User($results[0]['username'], $results[0]['password'], new \DateTime($results[0]['date_register']), $results[0]['id']);
 		}
 		return $user;
 	}
@@ -53,16 +53,14 @@ class UserFinder implements FinderInterface{
      * @param  mixed      $id
      * @return null|mixed
      */
-    public function findOneByUserNamePassword($username, $password){
+    public function findOneByUserName($username){
 		$user=null;
 		$query = "SELECT * FROM Users where username=:username";
 		$results = $this->connection->execute($query, array("username" => $username));
 		$results = $results->fetchAll(\PDO::FETCH_ASSOC);
 		
 		if(!empty($results)){
-			if(password_verify($password, $results[0]['password'])){
-				$user = new User($results[0]['username'], $results[0]['password'], new \DateTime($results[0]['date_creation']), $results[0]['id']);
-			}
+				$user = new User($results[0]['username'], $results[0]['password'], new \DateTime($results[0]['date_register']), $results[0]['id']);
 		}
 		return $user;
 	}

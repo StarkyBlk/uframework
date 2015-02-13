@@ -81,7 +81,10 @@ $app->post('/login', function (Request $request) use ($app, $connection) {
 	$userFinder = new Model\UserFinder($connection);
 	$username = $request->getParameter('username');
     $password = $request->getParameter('password');
-    if(null === $user = $userFinder->findOneByUserNamePassword($username,$password)){
+    if(null === $user = $userFinder->findOneByUserName($username)){
+		throw new Exception\HttpException(403,"Nom d'utilisateur ou mot de passe incorrect");
+	}
+	if(!password_verify($password, $user->getPassword())){
 		throw new Exception\HttpException(403,"Nom d'utilisateur ou mot de passe incorrect");
 	}
 	$_SESSION['is_authenticated'] = true;
