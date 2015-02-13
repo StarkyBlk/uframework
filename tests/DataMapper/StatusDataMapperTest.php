@@ -8,28 +8,42 @@ class StatusDataMapperTest extends TestCase
         $this->con = new \Model\Connection('sqlite::memory:');
         $this->con->exec(<<<SQL
 CREATE TABLE IF NOT EXISTS Users(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT PRIMARY KEY,
 	username VARCHAR(30) UNIQUE NOT NULL,
 	password VARCHAR(100) NOT NULL,
 	date_register DATETIME NOT NULL
-) ENGINE = MYISAM CHARACTER SET = utf8;
+);
 CREATE TABLE IF NOT EXISTS Statuses(
-	id INT AUTO_INCREMENT,
-	user_id VARCHAR(30),
+	id INT,
+	user_id INT,
 	message VARCHAR(140),
 	date_post DATETIME NOT NULL,
 	client VARCHAR(100) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES Users(id)
-) ENGINE = MYISAM CHARACTER SET = utf8;
+);
 SQL
         );
     }
 
-    public function testPersist(){
+	public function testPersist(){
         $mapper = new \Model\StatusMapper($this->con);
-        $status = new Model\Status('dsfsdfs', new DateTime(date("Y-m-d H:i:s")), 'sdfsdf', null, null, null);
+        $status = new Model\Status('dsfsdfs', new DateTime(date("Y-m-d H:i:s")), 'sdfsdf', null, null, '1');
         $this->assertTrue($mapper->persist($status));
-        //$this->assertTrue(true);
+	}
+	
+	public function testSelectAllEmpty(){
+        $finder = new \Model\StatusFinder($this->con);
+        $statuses = $finder->findAll();
+        $this->assertEquals(0,count($statuses));
+	}
+	
+	public function testSelectAllOneStatus(){
+        $finder = new \Model\StatusFinder($this->con);
+        $mapper = new \Model\StatusMapper($this->con);
+        $status = new Model\Status('dsfsdfs', new DateTime(date("Y-m-d H:i:s")), 'sdfsdf', null, null, '1');
+        $mapper->persist($status);
+        $statuses = $finder->findAll();
+        $this->assertEquals(1,count($statuses));
 	}
 }
