@@ -42,7 +42,7 @@ class Status {
         $this->username = $username;
         $this->user_id = $user_id;
         $this->message = $message;
-        $this->date_post = $date_post->format('Y-d-m H:i:s');
+        $this->date_post = $date_post->format("Y-m-d H:i:s");
         $this->client = $client;
     }
     

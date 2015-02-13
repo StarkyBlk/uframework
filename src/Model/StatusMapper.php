@@ -17,8 +17,7 @@ class StatusMapper{
 							'date_post' => $status->getDatePost(),
 							'client' => $status->getClient(),
 							);
-		
-		
+							
 		$query = "INSERT INTO Statuses(user_id,message,date_post,client) values(:user_id,:message,:date_post,:client)";
 		return $this->connection->executeQuery($query, $parameters);
     }
